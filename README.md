@@ -37,6 +37,19 @@ Om 02:13 's nachts krijgt je team een alarm: productie-app **FlowPortaal** van e
 | [docs/04-nabespreking-best-practices.md](docs/04-nabespreking-best-practices.md) | Facilitator + team | Debrief per kamer, vertaald naar jullie eigen Mendix-app |
 | [docs/05-antwoordformulier.md](docs/05-antwoordformulier.md) | Spelers | Printbaar invulformulier |
 
+## Online spelen (GitHub Pages)
+
+De map `site/` bevat een kant-en-klare statische site: startscherm met het verhaal, kamernavigatie, een countdown-timer van 75 minuten en een digitale **Emergency Console** als finale. De facilitatordocumenten (inclusief alle antwoorden) worden bewust níét gepubliceerd.
+
+1. Activeer eenmalig: *Settings → Pages → Build and deployment → Source: GitHub Actions*.
+2. Na elke push naar `main` deployt de workflow de site automatisch naar `https://<gebruikersnaam>.github.io/MendixEscaperoom/`.
+3. Pas je de Markdown in `docs/` aan, genereer de HTML dan opnieuw met:
+
+   ```bash
+   pip install markdown
+   python3 site/build.py
+   ```
+
 ## Snelstart voor de facilitator
 
 1. Print de puzzels uit [docs/02-puzzels-deelnemers.md](docs/02-puzzels-deelnemers.md) (1 set per team) en het antwoordformulier uit [docs/05-antwoordformulier.md](docs/05-antwoordformulier.md).

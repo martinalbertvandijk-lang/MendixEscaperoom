@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamer 5 — De Serverkamer — Operation VEILIG</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">OP<span>ERATION</span> VEILIG</a>
+  <div id="timer" class="timer">75:00</div>
+</header>
+<nav class="crumbs">
+  <a href="index.html">Start</a>
+<a href="kamer-1.html">Kamer 1</a>
+<a href="kamer-2.html">Kamer 2</a>
+<a href="kamer-3.html">Kamer 3</a>
+<a href="kamer-4.html">Kamer 4</a>
+<a href="kamer-5.html" class="active">Kamer 5</a>
+<a href="antwoordformulier.html">Formulier</a>
+<a href="console.html">🖥️ Console</a>
+</nav>
+<main>
+<h1>Puzzels voor deelnemers — Operation VEILIG</h1>
+<p><em>Deze puzzels worden per kamer uitgedeeld. Teams mogen alles annotated, verscheurd en beschrift worden.</em></p>
+<p><strong>Context voor alle kamers:</strong> FlowPortaal is een Mendix-app met deze user roles: <strong>Werknemer</strong>, <strong>Manager</strong>, <strong>HR</strong>, <strong>Salarisbeheer</strong> en <strong>Anoniem</strong>. De app heeft ca. 4.000 gebruikers. De plek waar alles samenkomt is het domeinmodel hieronder — hou dit bij de hand.</p>
+<h2>Het domeinmodel van FlowPortaal (alle kamers)</h2>
+<pre><code>Module: Verlof
+  Werknemer (persistent)
+    - Naam, E-mailadres, InDienstSinds, Team (enum: Finance, IT, Sales, HR)
+  Verlofaanvraag (persistent)
+    - DatumVan, DatumTot, Reden, Status (enum: Concept, Ingediend, Goedgekeurd, Afgekeurd)
+    - OpmerkingManager
+    - Association: Verlofaanvraag ──aangevraagdDoor──&gt; Werknemer
+    - Association: Verlofaanvraag ──beoordeeldDoor──&gt; Werknemer (de manager)
+
+Module: Beloning
+  Salarisgegevens (persistent)
+    - BSN, SalarisMaandelijks, IBAN, Banknaam
+    - Association: Salarisgegevens ──1──&gt; Werknemer
+  SalarisRapport (non-persistent)
+    - RapportHTML, AantalMedewerkers, TotaalLoonkost
+
+Module: MijnAccount
+  Profiel (persistent, generalisatie van Account)
+    - Standaard Mendix Account-attributen + Telefoonnummer
+</code></pre>
+<hr />
+<h1>KAMER 5 — De Serverkamer</h1>
+<p><em>Thema: de productie-checklist. Tijd: 10 minuten.</em></p>
+<p>In de serverkamer hangt een bord met acht post-its — de aantekeningen van Nina na haar snelle audit van 02:07. Elke post-it is een bevinding. De vraag die het team moet beantwoorden is niet "welke zijn fout" — <strong>ze zijn allemaal fout</strong> — maar wél: bij welke hoort een <strong>blokkerende fix vóór GA</strong>, en bij welke een <strong>beveiligingsmaatregel die het team structureel moet inregelen</strong>?</p>
+<h3>De acht post-its van Nina</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Bevinding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>"Security level van het project staat op Prototype/DEMOMODE, 'even zo laten tot na de demo' — dat was 8 maanden geleden."</td>
+</tr>
+<tr>
+<td>2</td>
+<td>"De API-key van de salarisprovider staat als constante in het model, in git, met een commentaarregel 'niet committen hoor!'. De sleutel staat er dus in."</td>
+</tr>
+<tr>
+<td>3</td>
+<td>"Validatie van het IBAN staat alleen in de UI (client-side). De microflow die opslaat controleert niets."</td>
+</tr>
+<tr>
+<td>4</td>
+<td>"Op 2 microflows staat 'Ignore security' aangevinkt. Beide komen via één pagina in de productieflow."</td>
+</tr>
+<tr>
+<td>5</td>
+<td>"Er is nergens een audit trail: wie welke aanvraag heeft goedgekeurd, is nergens vastgelegd."</td>
+</tr>
+<tr>
+<td>6</td>
+<td>"De demo-gebruikers MxAdmin/demo en hruser/demo bestaan nog in productie."</td>
+</tr>
+<tr>
+<td>7</td>
+<td>"Een scheduled event exporteert elke nacht salarisgegevens naar een externe locatie; er is geen logging van wat er verstuurd wordt en er loopt geen enkele rol- of omgevingscontrole op wie de export mag triggeren."</td>
+</tr>
+<tr>
+<td>8</td>
+<td>"Er is nooit een threat model gemaakt. Nooit. Voor geen enkele feature."</td>
+</tr>
+</tbody>
+</table>
+<h3>Opdracht</h3>
+<ol>
+<li>Sorteer de post-its in twee bakken:</li>
+<li><strong>BLIKSEM</strong> = moet vóór GA gefixed worden, anders kan De Kraai vannacht opnieuw binnenkomen;</li>
+<li><strong>FOUW-DIEFSTAL</strong> = structurele verbetering (proces/gewoonte) die geen applicatie-fix is maar het team sterker maakt.</li>
+<li>Zet op het antwoordformulier per post-it BLIKSEM of FOUW-DIEFSTAL.</li>
+<li>Noteer hoeveel post-its in de bak BLIKSEM zitten — dat is het aantal "bloedende wonden" van deze kamer.</li>
+</ol>
+<p><em>Extra vraag voor het antwoordformulier: voor post-it 8 — maak in 3 minuten een mini-threat model voor de salarisexport van post-it 7. Kies 2 STRIDE-categorieën en schrijf bij elke categorie één concrete maatregel in Mendix.</em></p>
+<hr />
+</main>
+<footer>
+  <p>Operation VEILIG — escaperoom voor Mendix-developers ·
+     Facilitator? Lees <code>docs/00-facilitator-handleiding.md</code> en houd
+     <code>docs/03-antwoorden-en-oplossingen.md</code> uit handen van de teams.</p>
+</footer>
+<script src="assets/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamer 1 — De Manifestkaart — Operation VEILIG</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">OP<span>ERATION</span> VEILIG</a>
+  <div id="timer" class="timer">75:00</div>
+</header>
+<nav class="crumbs">
+  <a href="index.html">Start</a>
+<a href="kamer-1.html" class="active">Kamer 1</a>
+<a href="kamer-2.html">Kamer 2</a>
+<a href="kamer-3.html">Kamer 3</a>
+<a href="kamer-4.html">Kamer 4</a>
+<a href="kamer-5.html">Kamer 5</a>
+<a href="antwoordformulier.html">Formulier</a>
+<a href="console.html">🖥️ Console</a>
+</nav>
+<main>
+<h1>Puzzels voor deelnemers — Operation VEILIG</h1>
+<p><em>Deze puzzels worden per kamer uitgedeeld. Teams mogen alles annotated, verscheurd en beschrift worden.</em></p>
+<p><strong>Context voor alle kamers:</strong> FlowPortaal is een Mendix-app met deze user roles: <strong>Werknemer</strong>, <strong>Manager</strong>, <strong>HR</strong>, <strong>Salarisbeheer</strong> en <strong>Anoniem</strong>. De app heeft ca. 4.000 gebruikers. De plek waar alles samenkomt is het domeinmodel hieronder — hou dit bij de hand.</p>
+<h2>Het domeinmodel van FlowPortaal (alle kamers)</h2>
+<pre><code>Module: Verlof
+  Werknemer (persistent)
+    - Naam, E-mailadres, InDienstSinds, Team (enum: Finance, IT, Sales, HR)
+  Verlofaanvraag (persistent)
+    - DatumVan, DatumTot, Reden, Status (enum: Concept, Ingediend, Goedgekeurd, Afgekeurd)
+    - OpmerkingManager
+    - Association: Verlofaanvraag ──aangevraagdDoor──&gt; Werknemer
+    - Association: Verlofaanvraag ──beoordeeldDoor──&gt; Werknemer (de manager)
+
+Module: Beloning
+  Salarisgegevens (persistent)
+    - BSN, SalarisMaandelijks, IBAN, Banknaam
+    - Association: Salarisgegevens ──1──&gt; Werknemer
+  SalarisRapport (non-persistent)
+    - RapportHTML, AantalMedewerkers, TotaalLoonkost
+
+Module: MijnAccount
+  Profiel (persistent, generalisatie van Account)
+    - Standaard Mendix Account-attributen + Telefoonnummer
+</code></pre>
+<hr />
+<h1>KAMER 1 — De Manifestkaart</h1>
+<p><em>Thema: threat modeling. Tijd: 10 minuten.</em></p>
+<p>De Kraai heeft een manifest in de codebase achtergelaten. Hij beschrijft zes aanvallen — de aanvallen die hij <strong>heeft uitgevoerd of geprobeerd</strong>. Het incidentteam van Noorderlicht heeft nooit een threat model gemaakt voor FlowPortaal. Als ze dat wél hadden gedaan, hadden ze deze zes aanvallen zelf opgeschreven.</p>
+<p>De beveiligingsdienst werkt met het standaard <strong>STRIDE</strong>-model:</p>
+<table>
+<thead>
+<tr>
+<th>Letter</th>
+<th>Categorie</th>
+<th>Betekenis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S</strong></td>
+<td>Spoofing</td>
+<td>Iemand doet zich voor als iemand anders</td>
+</tr>
+<tr>
+<td><strong>T</strong></td>
+<td>Tampering</td>
+<td>Iemand knutselt met gegevens onderweg of in opslag</td>
+</tr>
+<tr>
+<td><strong>R</strong></td>
+<td>Repudiation</td>
+<td>Iemand kan ontkennen dat hij iets heeft gedaan, want het is nergens gelogd</td>
+</tr>
+<tr>
+<td><strong>I</strong></td>
+<td>Information disclosure</td>
+<td>Gegevens lekken naar iemand die ze niet mag zien</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>Denial of service</td>
+<td>De app wordt onbruikbaar gemaakt</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>Elevation of privilege</td>
+<td>Iemand krijgt rechten die hij niet zou moeten hebben</td>
+</tr>
+</tbody>
+</table>
+<h3>De zes aanvallen uit het manifest</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Uitspraak van De Kraai</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>"Ik logde in als de CFO. Ik hoefde zijn wachtwoord niet eens te raden — zijn sessie lag gewoon op internet, onversleuteld, omdat iemand 'HTTPS verplicht' had uitgezet voor 'even testen'."</em></td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>"De salarisbatch die naar de externe salarisprovider ging? Ik heb onderweg het IBAN in mijn eigen rekening veranderd. Niemand merkte het, er was geen controle som op de batch."</em></td>
+</tr>
+<tr>
+<td>3</td>
+<td><em>"Manager De Vries zegt dat hij verlofaanvraag #1042 nooit heeft goedgekeurd. Bewijs het maar eens. Er staat nergens wie wat wanneer deed."</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td><em>"Wist je dat ik als gewone werknemer één URL kon aanpassen en het volledige salarisrapport van alle 4.000 medewerkers binnenkreeg? Heel aardig van de makers."</em></td>
+</tr>
+<tr>
+<td>5</td>
+<td><em>"Vijftigduizend inlogpogingen per minuut, tien minuten lang. Daarna kon niemand meer inloggen. Zelfs jullie HR-directeur niet. Ik heb niet één account gepakt — ik heb gewoon alles platgelegd."</em></td>
+</tr>
+<tr>
+<td>6</td>
+<td><em>"Ik paste in het goedkeuringsscherm één veldje aan en ineens was ik manager van mezelf. Goedgekeurd, door mijzelf, over mijn eigen aanvraag. Mooi systeem, dat jij ook je eigen verlof mag goedkeuren."</em></td>
+</tr>
+</tbody>
+</table>
+<h3>Opdracht</h3>
+<ol>
+<li>Wijs elke aanval de juiste STRIDE-categorie toe (elke categorie komt <strong>precies één keer</strong> voor).</li>
+<li>Schrijf op het antwoordformulier bij elke aanval de letter (S/T/R/I/D/E).</li>
+<li>Als je klaar bent, vormen de zes letters in de volgorde 1 t/m 6 een woordje. Dit is je <strong>controlewoord</strong> — laat het aan de back-up van de beveiligingsdienst zien.</li>
+</ol>
+<p><em>Extra vraag voor het antwoordformulier: bij welke van deze zes aanvallen had een threat model het team wél kunnen redden, zelfs als de code al geschreven was?</em></p>
+<hr />
+</main>
+<footer>
+  <p>Operation VEILIG — escaperoom voor Mendix-developers ·
+     Facilitator? Lees <code>docs/00-facilitator-handleiding.md</code> en houd
+     <code>docs/03-antwoorden-en-oplossingen.md</code> uit handen van de teams.</p>
+</footer>
+<script src="assets/game.js"></script>
+</body>
+</html>

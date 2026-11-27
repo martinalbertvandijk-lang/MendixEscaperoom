@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamer 2 — De Domeinmodel-kluis — Operation VEILIG</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">OP<span>ERATION</span> VEILIG</a>
+  <div id="timer" class="timer">75:00</div>
+</header>
+<nav class="crumbs">
+  <a href="index.html">Start</a>
+<a href="kamer-1.html">Kamer 1</a>
+<a href="kamer-2.html" class="active">Kamer 2</a>
+<a href="kamer-3.html">Kamer 3</a>
+<a href="kamer-4.html">Kamer 4</a>
+<a href="kamer-5.html">Kamer 5</a>
+<a href="antwoordformulier.html">Formulier</a>
+<a href="console.html">🖥️ Console</a>
+</nav>
+<main>
+<h1>Puzzels voor deelnemers — Operation VEILIG</h1>
+<p><em>Deze puzzels worden per kamer uitgedeeld. Teams mogen alles annotated, verscheurd en beschrift worden.</em></p>
+<p><strong>Context voor alle kamers:</strong> FlowPortaal is een Mendix-app met deze user roles: <strong>Werknemer</strong>, <strong>Manager</strong>, <strong>HR</strong>, <strong>Salarisbeheer</strong> en <strong>Anoniem</strong>. De app heeft ca. 4.000 gebruikers. De plek waar alles samenkomt is het domeinmodel hieronder — hou dit bij de hand.</p>
+<h2>Het domeinmodel van FlowPortaal (alle kamers)</h2>
+<pre><code>Module: Verlof
+  Werknemer (persistent)
+    - Naam, E-mailadres, InDienstSinds, Team (enum: Finance, IT, Sales, HR)
+  Verlofaanvraag (persistent)
+    - DatumVan, DatumTot, Reden, Status (enum: Concept, Ingediend, Goedgekeurd, Afgekeurd)
+    - OpmerkingManager
+    - Association: Verlofaanvraag ──aangevraagdDoor──&gt; Werknemer
+    - Association: Verlofaanvraag ──beoordeeldDoor──&gt; Werknemer (de manager)
+
+Module: Beloning
+  Salarisgegevens (persistent)
+    - BSN, SalarisMaandelijks, IBAN, Banknaam
+    - Association: Salarisgegevens ──1──&gt; Werknemer
+  SalarisRapport (non-persistent)
+    - RapportHTML, AantalMedewerkers, TotaalLoonkost
+
+Module: MijnAccount
+  Profiel (persistent, generalisatie van Account)
+    - Standaard Mendix Account-attributen + Telefoonnummer
+</code></pre>
+<hr />
+<h1>KAMER 2 — De Domeinmodel-kluis</h1>
+<p><em>Thema: entity access rights. Tijd: 10 minuten.</em></p>
+<p>In de kluis van de afdeling zit een uitdraai van de toegangsrechten zoals de vorige developer ze had ingesteld ("het werkte, dus klaar"). De Kraai heeft er acht uitspraken bijgeschreven over wat er volgens hem <strong>mogelijk is in FlowPortaal</strong>. Achter elk van zijn beweringen schuilt óf een fout ingestelde access rule, óf een juiste beslissing die het team goed heeft gedaan.</p>
+<p>De beveiligingsdienst herinnert je aan het uitgangspunt: <strong>least privilege</strong> — iedereen krijgt het minimum aan rechten dat nodig is, en <code>Delete</code>-rechten krijgen eindgebruikers vrijwel nooit.</p>
+<h3>De acht beweringen</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Bewering over FlowPortaal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td><em>"Een gewone Werknemer kan een nieuwe Verlofaanvraag aanmaken, z'n eigen aanvragen lezen en bewerken — maar alleen zolang de status 'Concept' is. Via een XPath-constraint op zijn eigen aanvragen."</em></td>
+</tr>
+<tr>
+<td>B</td>
+<td><em>"Diezelfde gewone Werknemer kan de Salarisgegevens van álle collega's lezen. Handig voor op de vrijdagmiddag."</em></td>
+</tr>
+<tr>
+<td>C</td>
+<td><em>"Een Manager kan Verlofaanvragen van zijn eigen team lezen en op status 'Ingediend' goedkeuren of afkeuren. Van teams waar hij niets mee te maken heeft, ziet hij niets."</em></td>
+</tr>
+<tr>
+<td>D</td>
+<td><em>"De rol Anoniem heeft leesrechten op SalarisRapport, zodat mensen zonder account 'even het aantal medewerkers' kunnen opvragen."</em></td>
+</tr>
+<tr>
+<td>E</td>
+<td><em>"Alle rollen hebben delete-recht op Verlofaanvraag, zodat niemand ooit tegen een aanvraag aanloopt die hij niet kan weggooien."</em></td>
+</tr>
+<tr>
+<td>F</td>
+<td><em>"De opmerkingen van de manager in een afgekeurde aanvraag (OpmerkingManager) kunnen alleen door de manager en HR worden gelezen — de gewone Werknemer ziet zijn eigen aanvraag, maar niet dat veld. Atribute-level access rules, mooi geregeld."</em></td>
+</tr>
+<tr>
+<td>G</td>
+<td><em>"Aan Salarisgegevens mag alleen de rol Salarisbeheer schrijven. Werknemers kunnen hun eigen IBAN niet zomaar wijzigen — dat gaat via een bevestigde microflow met dubbele controle."</em></td>
+</tr>
+<tr>
+<td>H</td>
+<td><em>"Het SalarisRapport is een non-persistent entity, dus die heeft helemaal geen access rules nodig. Rechten instellen op iets dat niet wordt opgeslagen is zonde van de tijd."</em></td>
+</tr>
+</tbody>
+</table>
+<h3>Opdracht</h3>
+<ol>
+<li>Beoordeel elke bewering: <strong>juist ingesteld</strong> of <strong>fout ingesteld</strong> (dit is een securitygevaar).</li>
+<li>Zet op het antwoordformulier bij elke letter J of F.</li>
+<li><strong>Tel hoeveel beweringen fout ingesteld zijn.</strong> Dat aantal is de kluiscombinatie van deze kamer: <em>"Er zijn er ___"</em> — laat het aan de back-up zien.</li>
+</ol>
+<p><em>Extra vraag voor het antwoordformulier: bewering A klopt bijna — welke XPath-constraint hoort er exact bij om te zorgen dat een Werknemer alleen z'n eigen aanvragen ziet?</em></p>
+<hr />
+</main>
+<footer>
+  <p>Operation VEILIG — escaperoom voor Mendix-developers ·
+     Facilitator? Lees <code>docs/00-facilitator-handleiding.md</code> en houd
+     <code>docs/03-antwoorden-en-oplossingen.md</code> uit handen van de teams.</p>
+</footer>
+<script src="assets/game.js"></script>
+</body>
+</html>
