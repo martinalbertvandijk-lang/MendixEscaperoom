@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamer 4 — De Nanoflow-val — Operation VEILIG</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">OP<span>ERATION</span> VEILIG</a>
+  <div id="timer" class="timer">75:00</div>
+</header>
+<nav class="crumbs">
+  <a href="index.html">Start</a>
+<a href="kamer-1.html">Kamer 1</a>
+<a href="kamer-2.html">Kamer 2</a>
+<a href="kamer-3.html">Kamer 3</a>
+<a href="kamer-4.html" class="active">Kamer 4</a>
+<a href="kamer-5.html">Kamer 5</a>
+<a href="antwoordformulier.html">Formulier</a>
+<a href="console.html">🖥️ Console</a>
+</nav>
+<main>
+<h1>Puzzels voor deelnemers — Operation VEILIG</h1>
+<p><em>Deze puzzels worden per kamer uitgedeeld. Teams mogen alles annotated, verscheurd en beschrift worden.</em></p>
+<p><strong>Context voor alle kamers:</strong> FlowPortaal is een Mendix-app met deze user roles: <strong>Werknemer</strong>, <strong>Manager</strong>, <strong>HR</strong>, <strong>Salarisbeheer</strong> en <strong>Anoniem</strong>. De app heeft ca. 4.000 gebruikers. De plek waar alles samenkomt is het domeinmodel hieronder — hou dit bij de hand.</p>
+<h2>Het domeinmodel van FlowPortaal (alle kamers)</h2>
+<pre><code>Module: Verlof
+  Werknemer (persistent)
+    - Naam, E-mailadres, InDienstSinds, Team (enum: Finance, IT, Sales, HR)
+  Verlofaanvraag (persistent)
+    - DatumVan, DatumTot, Reden, Status (enum: Concept, Ingediend, Goedgekeurd, Afgekeurd)
+    - OpmerkingManager
+    - Association: Verlofaanvraag ──aangevraagdDoor──&gt; Werknemer
+    - Association: Verlofaanvraag ──beoordeeldDoor──&gt; Werknemer (de manager)
+
+Module: Beloning
+  Salarisgegevens (persistent)
+    - BSN, SalarisMaandelijks, IBAN, Banknaam
+    - Association: Salarisgegevens ──1──&gt; Werknemer
+  SalarisRapport (non-persistent)
+    - RapportHTML, AantalMedewerkers, TotaalLoonkost
+
+Module: MijnAccount
+  Profiel (persistent, generalisatie van Account)
+    - Standaard Mendix Account-attributen + Telefoonnummer
+</code></pre>
+<hr />
+<h1>KAMER 4 — De Nanoflow-val</h1>
+<p><em>Thema: de client vertrouwen. Tijd: 10 minuten.</em></p>
+<p>In de code vindt het team vier versies van de verlofgoedkeuring. Slechts één ervan kan tegen De Kraai. De beveiligingsdienst heeft één wet: <strong>alles wat in de browser gebeurt, kan De Kraai zien en veranderen. Nanoflows draaien in de browser. Vertrouw nooit alleen de client.</strong></p>
+<h3>De vier implementaties</h3>
+<table>
+<thead>
+<tr>
+<th>Versie</th>
+<th>Implementatie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>Een <strong>nanoflow</strong> controleert of de ingelogde gebruiker de rol Manager heeft, en zo ja: zet de Verlofaanvraag op status Goedgekeurd en commit hem. Netjes met een toast-melding als je geen manager bent.</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Een <strong>microflow</strong> haalt de Verlofaanvraag op via XPath mét de constraint dat de aanvraag bij een collega uit het eigen team hoort, controleert serverzijdig of de gebruiker de rol Manager heeft, zet de status op Goedgekeurd en commit. Geen van de checks kan worden overgeslagen door de client.</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Een <strong>microflow</strong> krijgt als parameter een <code>VerlofaanvraagID</code> (een string) vanuit de client, haalt de aanvraag op <strong>zonder</strong> XPath-constraint op de oorsprong, controleert de rol Manager en commit de goedkeuring.</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Een pagina met een knop "Goedkeuren" die alleen zichtbaar is voor de rol Manager (visibility op de knop gebaseerd op de rollen van de gebruiker). De knop start een nanoflow die de goedkeuring commit. Verder geen enkele controle.</td>
+</tr>
+</tbody>
+</table>
+<h3>Opdracht</h3>
+<ol>
+<li>Beoordeel elke versie: <strong>VEILIG</strong> of <strong>KRAAI-VOER</strong> (onveilig).</li>
+<li>Zet op het antwoordformulier per versie V of K.</li>
+<li><strong>Tel hoeveel versies KRAAI-VOER zijn.</strong> Dat aantal is het "aantal sluitgaten" van deze kamer — laat het aan de back-up zien.</li>
+</ol>
+<p><em>Extra vragen voor het antwoordformulier: (1) waarom kan De Kraai bij versie A en D de rolcheck en de zichtbaarheid omzeilen? (2) welke aanval uit Kamer 1 lijkt sterk op versie C — en hoe heet deze aanvalsfamilie (afkorting met vier letters)?</em></p>
+<hr />
+</main>
+<footer>
+  <p>Operation VEILIG — escaperoom voor Mendix-developers ·
+     Facilitator? Lees <code>docs/00-facilitator-handleiding.md</code> en houd
+     <code>docs/03-antwoorden-en-oplossingen.md</code> uit handen van de teams.</p>
+</footer>
+<script src="assets/game.js"></script>
+</body>
+</html>

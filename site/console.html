@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emergency Console — Operation VEILIG</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">OP<span>ERATION</span> VEILIG</a>
+  <div id="timer" class="timer">75:00</div>
+</header>
+<nav class="crumbs">
+  <a href="index.html">Start</a>
+  <a href="kamer-1.html">Kamer 1</a>
+  <a href="kamer-2.html">Kamer 2</a>
+  <a href="kamer-3.html">Kamer 3</a>
+  <a href="kamer-4.html">Kamer 4</a>
+  <a href="kamer-5.html">Kamer 5</a>
+  <a href="antwoordformulier.html">Formulier</a>
+  <a class="active" href="console.html">🖥️ Console</a>
+</nav>
+<main>
+  <div class="console-wrap">
+    <h1>Emergency Console</h1>
+    <p style="color: var(--muted); font-style: italic;">
+      Zes letterfragmenten. Zes posities. De console accepteert precies één woord —
+      het is wat jullie de hele avond deden zonder het te weten.
+    </p>
+    <div class="slots">
+      <input maxlength="1" autocomplete="off" aria-label="letter 1">
+      <input maxlength="1" autocomplete="off" aria-label="letter 2">
+      <input maxlength="1" autocomplete="off" aria-label="letter 3">
+      <input maxlength="1" autocomplete="off" aria-label="letter 4">
+      <input maxlength="1" autocomplete="off" aria-label="letter 5">
+      <input maxlength="1" autocomplete="off" aria-label="letter 6">
+    </div>
+    <p id="console-msg"></p>
+    <div id="victory">
+      <h2>✔ SYSTEEM HERSTELD</h2>
+      <p>
+        De back-up van de beveiligingsdienst draait, FlowPortaal is terug en De Kraai
+        heeft voorgoed te horen gekregen dat hij verliest — niet aan een firewall, maar
+        aan een team dat gewoon, saai en grondig zijn werk doet.
+      </p>
+      <p style="color: var(--muted);">Nu: de nabespreking met de facilitator. Dat is waar de echte winst zit.</p>
+    </div>
+  </div>
+</main>
+<footer>
+  <p>Operation VEILIG — escaperoom voor Mendix-developers ·
+     Facilitator? Lees <code>docs/00-facilitator-handleiding.md</code> en houd
+     <code>docs/03-antwoorden-en-oplossingen.md</code> uit handen van de teams.</p>
+</footer>
+<script src="assets/game.js"></script>
+</body>
+</html>

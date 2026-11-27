@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operation VEILIG — Operation VEILIG</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">OP<span>ERATION</span> VEILIG</a>
+  <div id="timer" class="timer">75:00</div>
+</header>
+<nav class="crumbs">
+  <a href="index.html" class="active">Start</a>
+<a href="kamer-1.html">Kamer 1</a>
+<a href="kamer-2.html">Kamer 2</a>
+<a href="kamer-3.html">Kamer 3</a>
+<a href="kamer-4.html">Kamer 4</a>
+<a href="kamer-5.html">Kamer 5</a>
+<a href="antwoordformulier.html">Formulier</a>
+<a href="console.html">🖥️ Console</a>
+</nav>
+<main>
+<h1>Operation VEILIG — het verhaal en de spelregels</h1>
+<p><em>De facilitator leest dit voor (of laat het inspreken als "nooduitzending"). Zet het licht wat gedimmd.</em></p>
+<hr />
+<h2>De nooduitzending — 02:13</h2>
+<blockquote>
+<p><em>Statisch. Dan een stem, gehaast.</em></p>
+<p>"Als je dit hoort, is het al te laat. Dit is Nina, developer on-call bij Noorderlicht Software.</p>
+<p>Om 02:07 ging alle alarmbellen tegelijk af. Ons productieportaal — <strong>FlowPortaal</strong>, de Mendix-app waar heel het bedrijf zijn verlof, salarisstroken en personeelsdossiers ophaalt — is overgenomen. Op het scherm staat één woord: <strong>KRAAI</strong>.</p>
+<p>Hij noemt zichzelf De Kraai. Hij zegt dat hij de salarisgegevens van vierduizend medewerkers al heeft. Hij heeft de app vergrendeld en hij heeft... iets achtergelaten. Vijf sporen. Alsof hij wil dat we snappen hóé we dit hebben laten gebeuren.</p>
+<p>De back-up van de beveiligingsdienst werkt alleen als we een ontsleutelingswachtwoord invoeren. Zes letters. De Kraai heeft de letters versnipperd en verstopt in zijn vijf sporen.</p>
+<p>Jullie zijn het incidentteam. Je zit opgesloten op de afdeling, de deuren zijn op slot, het enige dat werkt is jullie laptop en de printer. De Kraai zegt dat hij over <strong>75 minuten</strong> de database wist.</p>
+<p>Eén ding heeft Nina nog kunnen doorgeven voordat de lijn doodging: <em>"Hij exploitte geen Mendix. Hij exploitte ons. Alles wat hij gebruikte, hebben wij zelf opengezet."</em></p>
+<p>Veel succes. De klok loopt."</p>
+</blockquote>
+<div class="startbox">
+  <p class="start-hint">De klok loopt 75 minuten en blijft doorlopen op elke pagina.</p>
+  <button id="start-clock" type="button">▶ Start de klok van De Kraai</button>
+  <button id="reset-clock" type="button" hidden>⟲ Opnieuw beginnen</button>
+</div>
+
+<h2>De spelregels</h2>
+<ol>
+<li><strong>Jullie zijn het incidentteam.</strong> Los de vijf sporen (kamers) op. Elke kamer levert één of meer <strong>letterfragmenten</strong> op — zit in een enveloppe die je krijgt zodra je antwoord is goedgekeurd.</li>
+<li><strong>Vul het antwoordformulier in</strong> tijdens het spelen. Alles wat je noteert, heb je nodig in de finale en de nabespreking.</li>
+<li><strong>Elke spoor wijst op een echte securityfout</strong> die De Kraai heeft gebruikt. Los je de spoor op, dan heb je automatisch de fout gevonden. Noteer de fout op het formulier.</li>
+<li><strong>Het wachtwoord:</strong> de zes letters vormen, in de volgorde die op de fragmentkaarten staat, het wachtwoord voor de Emergency Console. De Kraai houdt niet van dubbele encryptie: het is een gewoon Nederlands woord.</li>
+<li><strong>Hints:</strong> je krijgt gratis één hint per spel. Daarna kost een hint 2 minuten van jullie tijd. Vraag ze bij de "back-up van de beveiligingsdienst" (de facilitator).</li>
+<li><strong>De Kraai maakt zich bekend</strong> op gezette momenten. Negeer zijn opmerkingen niet: soms zit er een waarheid in die je verder helpt.</li>
+</ol>
+<p><em>Einde van het voorleesdeel. Deel de eerste puzzel uit: <strong>Kamer 1 — De Manifestkaart</strong>. Start de klok.</em></p>
+</main>
+<footer>
+  <p>Operation VEILIG — escaperoom voor Mendix-developers ·
+     Facilitator? Lees <code>docs/00-facilitator-handleiding.md</code> en houd
+     <code>docs/03-antwoorden-en-oplossingen.md</code> uit handen van de teams.</p>
+</footer>
+<script src="assets/game.js"></script>
+</body>
+</html>

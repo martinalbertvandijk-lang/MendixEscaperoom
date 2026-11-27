@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamer 3 — De Anonieme Deur — Operation VEILIG</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">OP<span>ERATION</span> VEILIG</a>
+  <div id="timer" class="timer">75:00</div>
+</header>
+<nav class="crumbs">
+  <a href="index.html">Start</a>
+<a href="kamer-1.html">Kamer 1</a>
+<a href="kamer-2.html">Kamer 2</a>
+<a href="kamer-3.html" class="active">Kamer 3</a>
+<a href="kamer-4.html">Kamer 4</a>
+<a href="kamer-5.html">Kamer 5</a>
+<a href="antwoordformulier.html">Formulier</a>
+<a href="console.html">🖥️ Console</a>
+</nav>
+<main>
+<h1>Puzzels voor deelnemers — Operation VEILIG</h1>
+<p><em>Deze puzzels worden per kamer uitgedeeld. Teams mogen alles annotated, verscheurd en beschrift worden.</em></p>
+<p><strong>Context voor alle kamers:</strong> FlowPortaal is een Mendix-app met deze user roles: <strong>Werknemer</strong>, <strong>Manager</strong>, <strong>HR</strong>, <strong>Salarisbeheer</strong> en <strong>Anoniem</strong>. De app heeft ca. 4.000 gebruikers. De plek waar alles samenkomt is het domeinmodel hieronder — hou dit bij de hand.</p>
+<h2>Het domeinmodel van FlowPortaal (alle kamers)</h2>
+<pre><code>Module: Verlof
+  Werknemer (persistent)
+    - Naam, E-mailadres, InDienstSinds, Team (enum: Finance, IT, Sales, HR)
+  Verlofaanvraag (persistent)
+    - DatumVan, DatumTot, Reden, Status (enum: Concept, Ingediend, Goedgekeurd, Afgekeurd)
+    - OpmerkingManager
+    - Association: Verlofaanvraag ──aangevraagdDoor──&gt; Werknemer
+    - Association: Verlofaanvraag ──beoordeeldDoor──&gt; Werknemer (de manager)
+
+Module: Beloning
+  Salarisgegevens (persistent)
+    - BSN, SalarisMaandelijks, IBAN, Banknaam
+    - Association: Salarisgegevens ──1──&gt; Werknemer
+  SalarisRapport (non-persistent)
+    - RapportHTML, AantalMedewerkers, TotaalLoonkost
+
+Module: MijnAccount
+  Profiel (persistent, generalisatie van Account)
+    - Standaard Mendix Account-attributen + Telefoonnummer
+</code></pre>
+<hr />
+<h1>KAMER 3 — De Anonieme Deur</h1>
+<p><em>Thema: anonieme toegang. Tijd: 10 minuten.</em></p>
+<p>Nina's laatste bericht bevatte een netwerkkaart van FlowPortaal zoals de applicatie die nu <strong>echt</strong> bedient — inclusief wat er via de rol <strong>Anoniem</strong> bereikbaar is. De Kraai gebruikt anonieme toegang altijd als eerste: het is de deur die developers vergeten.</p>
+<p>De regel van de beveiligingsdienst: <strong>alles wat anoniem bereikbaar is, is bereikbaar voor de hele wereld, inclusief De Kraai.</strong> Anoniem mag alleen wat echt voor iedereen bedoeld is (inlogpagina, aanmeldformulier voor een evenement, publieke info).</p>
+<h3>De kaart: wat is er bereikbaar?</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Object</th>
+<th>Type</th>
+<th>Bereikbaar via rol Anoniem?</th>
+<th>Toelichting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Pagina <code>Login</code></td>
+<td>Pagina</td>
+<td>✅ Ja</td>
+<td>Bevat de inlog- en wachtwoordvergeten-flow</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Pagina <code>Event_Aanmelden</code></td>
+<td>Pagina</td>
+<td>✅ Ja</td>
+<td>Publieke aanmelding voor het bedrijfsfeest, schrijft naar <code>Aanmelding</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Entity <code>Aanmelding</code></td>
+<td>Entity access</td>
+<td>✅ Ja, create én read op álle Aanmeldingen</td>
+<td>Create moest kunnen, "read erbij kon geen kwaad" — inclusief naam en telefoonnummer van elke aangemelde collega</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Microflow <code>DS_MijnVerlofOverzicht</code></td>
+<td>Microflow</td>
+<td>✅ Ja</td>
+<td>Kwam "per ongeluk" in de rol Anoniem terecht via het security-venster ("even oké geklikt")</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Entity <code>Verlofaanvraag</code></td>
+<td>Entity access</td>
+<td>✅ Ja, read via de anonieme rol</td>
+<td>Stond aan omdat "de pagina anders niet werkte"</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Microflow <code>MF_ZoekMedewerker</code></td>
+<td>Microflow</td>
+<td>✅ Ja</td>
+<td>Anonieme personeelszoeker: zoekt op naam en geeft volledige personeelsgegevens terug, inclusief BSN en salaris — "handig voor de receptie"</td>
+</tr>
+</tbody>
+</table>
+<h3>Opdracht</h3>
+<ol>
+<li>Onderzoek de zes objecten. Welke zijn <strong>terecht</strong> anoniem en welke zijn <strong>onterecht</strong> anoniem bereikbaar (en dus de deuren die De Kraai gebruikte)?</li>
+<li>Zet op het antwoordformulier per nummer: <strong>OK</strong> of <strong>DEUR</strong>.</li>
+<li>Noteer de nummers van alle DEUR-objecten op volgorde. Dat is de deurcode van deze kamer.</li>
+</ol>
+<p><em>Extra vragen voor het antwoordformulier: bij #6 — wat kan De Kraai met deze zoekflow? En wat moet er met object 5 gebeuren zodra de anonieme rol wordt ingetrokken?</em></p>
+<hr />
+</main>
+<footer>
+  <p>Operation VEILIG — escaperoom voor Mendix-developers ·
+     Facilitator? Lees <code>docs/00-facilitator-handleiding.md</code> en houd
+     <code>docs/03-antwoorden-en-oplossingen.md</code> uit handen van de teams.</p>
+</footer>
+<script src="assets/game.js"></script>
+</body>
+</html>
